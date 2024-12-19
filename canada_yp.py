@@ -42,6 +42,7 @@ def get_all_links():
         for page_num in range(0,num_pages):
             scraped_links = [[x, i[1]] for x in get_links_on_page('https://www.canadayp.ca/search_results?page={}&tid={}'.format(page_num, i[0]))]
             all_links.extend(scraped_links)
+            print(len(all_links))
 
     return all_links
 
@@ -72,9 +73,15 @@ def scrape_link(url, category):
 def main():
 
     all_links = get_all_links()
+    all_info = []
     
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        all_info = list(executor.map(scrape_link, [x[0] for x in all_links], [x[1] for x in all_links]))
+    #Can't use concurrent futures without bricking the IP address
+    #with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    #    all_info = list(executor.map(scrape_link, [x[0] for x in all_links], [x[1] for x in all_links]))
+    for link in all_links:
+        print('{}/{}'.format(all_links.index(link), len(all_links)))
+        info = scrape_link(link[0], link[1])
+        all_info = all_info.append(info)
 
     df = pd.DataFrame(columns=['name', 'number', 'email', 'website', 'category', 'url'], data=all_info)
     df.to_csv('canadayp_output.csv', index=False, encoding='utf_8_sig')
