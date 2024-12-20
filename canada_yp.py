@@ -4,7 +4,9 @@ import concurrent.futures
 import requests
 
 import pandas as pd
+import itertools
 import math
+import time
 import re
 
 #Scrapes all links to businesses on page
@@ -73,16 +75,24 @@ def scrape_link(url, category):
 def main():
 
     all_links = get_all_links()
+    df_links = pd.DataFrame(columns=['url','category'])
+    df_links = df_links.groupby(['url'])['category'].apply(', '.join).reset_index()
+    all_links = df_links.values.tolist()
+
+    
     all_info = []
     
     #Can't use concurrent futures without bricking the IP address
     #with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
     #    all_info = list(executor.map(scrape_link, [x[0] for x in all_links], [x[1] for x in all_links]))
     for link in all_links:
-        print('{}/{}'.format(all_links.index(link), len(all_links)))
-        info = scrape_link(link[0], link[1])
-        all_info = all_info.append(info)
+        print('{}/{} - {}'.format(all_links.index(link), len(all_links), link[0]))
+        try:
+            info = scrape_link(link[0], link[1])
+            all_info.append(info)
+        except:
+            time.sleep(5)
+            print('Pausing...')
 
     df = pd.DataFrame(columns=['name', 'number', 'email', 'website', 'category', 'url'], data=all_info)
     df.to_csv('canadayp_output.csv', index=False, encoding='utf_8_sig')
-
