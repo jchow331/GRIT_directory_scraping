@@ -23,6 +23,6 @@ all_emails = []
 for url in random.sample(all_urls, 500):
 
     email = scrape_for_email(url)
-    if email == True:
+    if email:
         all_emails.append(email)
      
