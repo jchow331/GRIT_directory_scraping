@@ -131,4 +131,4 @@ for hospital in hospitals:
 import pandas as pd
 
 df = pd.DataFrame(columns=['name','id','specialty','address','phone_number','link'], data=all_listings)
-df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\cpso\cspo_output_raw.csv', index=False)
+df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\cpso\cpso_output_raw.csv', index=False)
