@@ -31,7 +31,7 @@ driver.get('https://members.collegeofopticians.ca/Public-Register')
 #Get results and expand to 50 listings per page properly
 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 driver.find_element(By.ID, 'ctl01_TemplateBody_WebPartManager1_gwpciNewQueryMenuCommon_ciNewQueryMenuCommon_ResultsGrid_Sheet0_SubmitButton').click()
-time.sleep(30)
+time.sleep(60)
 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 pages = driver.find_element(By.XPATH, '//*[@id="ctl01_TemplateBody_WebPartManager1_gwpciNewQueryMenuCommon_ciNewQueryMenuCommon_ResultsGrid_Grid1_ctl00"]/tfoot/tr/td/table/tbody/tr/td/div[5]').text
@@ -47,7 +47,7 @@ driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 all_user_ids = []
 pages = int(re.findall('in (.+?) pages', new_pages)[0])
-for page in range(1,pages-1):
+for page in range(1,pages):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     all_user_ids.extend(get_user_ids(driver))
 
