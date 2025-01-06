@@ -10,6 +10,7 @@ def scrape_location(location):
     page = requests.get(url.format(location))
     soup = BeautifulSoup(page.text, 'html.parser')
     listings = soup.find_all('div', {'class':'one_third'})[1:-2]
+    #listings.extend(soup.find_all('div', {'class':'one_third last'})[1:-2])
     listings = [[next(iter(re.findall('<strong>(.+?)</strong>', str(x))), None),
                 location.title(),
                 next(iter(re.findall('Phone(.+?)\n', x.text)), None),
@@ -31,4 +32,4 @@ df = pd.DataFrame(columns=['name','location','phone_number','website'], data=all
 df['phone_number'] = df['phone_number'].str.strip()
 df['phone_number'] = df['phone_number'].replace(r"\D+", "", regex=True).str.strip()
 
-df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\dentists_directory\dentists_directory_canada_output.csv', index=False)
+df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\dentists_directory\dentist_directory_canada_output.csv', index=False)
