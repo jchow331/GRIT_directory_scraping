@@ -27,6 +27,15 @@ for optician_id in df['id'].tolist():
     all_data.append(scrape_id(optician_id))
     
 new_df = pd.DataFrame(columns=['name','location','phone_number','address'], data=all_data)
-new_df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\coo_opticians\coo_opticians_output_raw.csv', index=False)
+new_df['phone_number'] = new_df['phone_number'].str.strip()
+new_df['phone_number'] = new_df['phone_number'].replace(r"\D+", "", regex=True).str.strip()
+#new_df.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\coo_opticians\coo_opticians_output_raw.csv', index=False)
 
+df_905 = new_df[new_df['phone_number'].str[0:3] == '905']
+df_647 = new_df[new_df['phone_number'].str[0:3] == '647']
+df_416 = new_df[new_df['phone_number'].str[0:3] == '416']
 
+df_sorted = pd.concat([df_905, df_647, df_416, new_df])
+df_sorted = df_sorted.drop_duplicates(subset=['phone_number'], keep='first')
+
+df_sorted.to_csv(r'C:\Users\kumar\OneDrive\Desktop\Jordan\GRIT_directory_scraping\coo_opticians\coo_opticians_output.csv', index=False)
