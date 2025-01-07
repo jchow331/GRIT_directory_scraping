@@ -128,6 +128,9 @@ for hospital in hospitals:
 
         all_listings.extend(iterate_through_scrape(driver))
 
+from itertools import chain
+all_listings = list(chain(*all_listings))
+
 import pandas as pd
 
 df = pd.DataFrame(columns=['name','id','specialty','address','phone_number','link'], data=all_listings)
